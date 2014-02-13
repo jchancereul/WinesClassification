@@ -146,10 +146,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DataImporter.cpp" />
+    <ClCompile Include="DataAdapter.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="NNModel.cpp" />
+    <ClCompile Include="NormalizationFunction.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DataImporter.h" />
+    <ClInclude Include="NNModel.h" />
+    <ClInclude Include="NormalizationFunction.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
