@@ -21,21 +21,27 @@
     <ClCompile Include="DataImporter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NormalizationFunction.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="NNModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DataAdapter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DataHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="NormalizationFunction.h">
+    <ClInclude Include="NNModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NNModel.h">
+    <ClInclude Include="DataHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -52,7 +52,7 @@ void NNModel::Train(cv::Mat trainingData, cv::Mat trainingClasses, char *path)
 	cvReleaseFileStorage(&saved_model);
 }
 
-void Predict(char *path, cv::Mat predictData, cv::Mat classificationResults)
+void NNModel::Predict(char *path, cv::Mat predictData, cv::Mat classificationResults)
 {
 	/*
 	path is the path of the stored trained NNModel if it exists
@@ -88,7 +88,7 @@ void Predict(char *path, cv::Mat predictData, cv::Mat classificationResults)
 	}
 }
 
-double Test(char *path, cv::Mat testData, cv::Mat testLabels)
+double NNModel::Test(char *path, cv::Mat testData, cv::Mat testLabels)
 {
 	//Check if the trained model is still exact using unknown data
 	cv::Mat testingResults;
@@ -109,7 +109,7 @@ double Test(char *path, cv::Mat testData, cv::Mat testLabels)
 	return (double)goodPrediction / testData.rows * 100;
 }
 
-void ShowAccuracy(char *path, cv::Mat testData, cv::Mat testLabels)
+void NNModel::ShowAccuracy(char *path, cv::Mat testData, cv::Mat testLabels)
 {
 	printf("Model accuracy: %f%% \n", Test(path, testData, testLabels));
 }

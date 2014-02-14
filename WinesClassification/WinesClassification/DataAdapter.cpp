@@ -1,6 +1,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <vector>
 
 using namespace std;
 
@@ -10,11 +11,11 @@ char *path = "..\\Data\\winequality-white.csv";
 
 /*This method updates the matrix data into a reusable C++ capable matrix*/
 
-void ImportData(char *filename, float data[ROWS - 1][COLS])
+void DataAdapter(string filename, vector<vector<double>> data)
 {
 	//Import the .csv file using the fstream class
 
-	float inputdata[ROWS][COLS];
+	vector<vector<double>> inputdata;
 	ifstream file(filename);
 	string line;
 	int col = 0;
@@ -35,14 +36,11 @@ void ImportData(char *filename, float data[ROWS - 1][COLS])
 
 	//Delete the first row of the matrix (headers)
 
-	for (int i = 1; i < ROWS; i++) //Start from the second line of inputdata
+	for (int i = 1; i < inputdata.size(); i++) //Start from the second line of inputdata
 	{
-		for (int j = 0; j < COLS; j++)
+		for (int j = 0; j < inputdata[0].size(); j++)
 		{
 			data[i][j] = inputdata[i][j];
 		}
 	}
 }
-
-//WORK TO DO:
-//See if one cannot use struct or build a matrix class
