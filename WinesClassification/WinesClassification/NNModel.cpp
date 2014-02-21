@@ -26,13 +26,13 @@ void NNModel::Train(cv::Mat trainingData, cv::Mat trainingClasses, char *path)
 	//10 neurons in the input layer (10 explanatory variables)
 	//8 neurons in the hidden layer (arbitrary)
 	//6 neurons in the output layer (6 qualitites of wine)
-	cv::Mat layers(3, 1, CV_32FC2);
+	cv::Mat layers(3, 1, CV_32S);
 	layers.at<int>(0, 0) = _nbInputVariables;
-	layers.at<int>(1, 0) = (_nbInputVariables+_nbOutputClasses)/2; //check here
+	layers.at<int>(1, 0) = 10; //check here
 	layers.at<int>(2, 0) = _nbOutputClasses;
 
 	//2- Create the structure of the neural network
-	_MLP = CvANN_MLP(layers, CvANN_MLP::SIGMOID_SYM, 1, 1);
+	CvANN_MLP _MLP(layers, CvANN_MLP::SIGMOID_SYM, 1, 1);
 
 	//3- Train the weights of the neural network
 	CvANN_MLP_TrainParams params(
@@ -75,15 +75,17 @@ void NNModel::Predict(char *path, cv::Mat predictData, cv::Mat classificationRes
 
 	for (int i = 0; i < predictResults.rows; i++)
 	{
-		double predictedClass = predictResults.at<double>(0, 0);
+		double maxValue = 0.0;
+		int predictedClass = -1;
 		for (int j = 0; j < predictResults.cols; j++)
 		{
-			if (predictResults.at<double>(0, j) > predictedClass)
+			if (predictResults.at<double>(i, j) > maxValue)
 			{
-				predictedClass = predictResults.at<double>(0, j);
+				maxValue = predictResults.at<double>(i, j);
+				predictedClass = j;
+				printf("MaxValue: %f\t PredictedClass: %d\n", maxValue,predictedClass);
 			}
-			int sampleLabel = predictedClass;
-			classificationResults.at<double>(i, 0) = sampleLabel; //working??
+			classificationResults.at<int>(i, 0) = predictedClass;
 		}
 	}
 }
@@ -91,7 +93,7 @@ void NNModel::Predict(char *path, cv::Mat predictData, cv::Mat classificationRes
 double NNModel::Test(char *path, cv::Mat testData, cv::Mat testLabels)
 {
 	//Check if the trained model is still exact using unknown data
-	cv::Mat testingResults;
+	cv::Mat testingResults(testData.rows,1,CV_32S);
 	cv::Mat testingSample;
 	int goodPrediction = 0;
 
@@ -102,9 +104,9 @@ double NNModel::Test(char *path, cv::Mat testData, cv::Mat testLabels)
 		int labelRank;
 		for (int j = 0; j < testLabels.cols; j++)
 		{
-			if (testLabels.at<int>(i, j) == 1) { labelRank = j; }
+			if (testLabels.at<double>(i, j) == 1.0) { labelRank = j; }
 		}
-		if (testingResults.at<double>(0, i) == labelRank){ goodPrediction++; }
+		if (testingResults.at<int>(i, 0) == labelRank){ goodPrediction++; }
 	}
 	return (double)goodPrediction / testData.rows * 100;
 }

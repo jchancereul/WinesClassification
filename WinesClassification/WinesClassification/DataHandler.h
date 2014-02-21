@@ -1,5 +1,4 @@
 #pragma once
-#include <string>
 #include <vector>
 #include "opencv2/opencv.hpp"
 
@@ -8,13 +7,13 @@ using namespace std;
 class DataHandler
 {
 public:
-	DataHandler(string filepath);
+	DataHandler(char *filepath);
 	~DataHandler();
 
 	void DataAdapter(vector<vector<double>> dataMatrix);
-	void DataImporter(cv::Mat &sampleData, cv::Mat &labels);
+	void DataImporter(cv::Mat &sampleData, cv::Mat &labels, int nbSamples);
 
 private:
-	string _filepath;
+	char *_filepath;
 };
 
