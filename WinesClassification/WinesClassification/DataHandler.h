@@ -11,7 +11,7 @@ public:
 	~DataHandler();
 
 	void DataAdapter(vector<vector<double>> dataMatrix);
-	void DataImporter(cv::Mat &sampleData, cv::Mat &labels, int nbSamples);
+	void DataImporter(cv::Mat &sampleData, cv::Mat &labels);
 
 private:
 	char *_filepath;

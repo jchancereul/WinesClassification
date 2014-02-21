@@ -1,7 +1,8 @@
 #include "DataHandler.h"
-#include "Utilities.h"
 #include <sstream>
 #include <fstream>
+#include <math.h>
+#include <random>
 
 DataHandler::DataHandler(char *filepath)
 {
@@ -17,8 +18,7 @@ DataHandler::~DataHandler()
 void DataHandler::DataAdapter(vector<vector<double>> dataMatrix)
 {
 	//Import the .csv file using the fstream class
-
-	vector<vector<double>> inputdata(4899,vector<double>(12)); //replace the integers by the true values
+	vector<vector<double>> inputdata(dataMatrix.size()+1,vector<double>(dataMatrix[0].size()));
 	ifstream file(_filepath);
 	string line;
 	int col = 0;
@@ -47,7 +47,6 @@ void DataHandler::DataAdapter(vector<vector<double>> dataMatrix)
 	}
 
 	//Normalization of the matrix (except the last column)
-
 	for (int j = 0; j<dataMatrix[0].size() - 1; j++)
 	{
 		vector<double> v(dataMatrix.size());
@@ -68,11 +67,16 @@ void DataHandler::DataAdapter(vector<vector<double>> dataMatrix)
 		}
 	}
 
+	//Shuffle the matrix
+	random_device rd;
+	mt19937 g(rd());
+	shuffle(dataMatrix.begin(), dataMatrix.end(), g);
+
 	//Save the adapted data into 3 .csv's
 	ofstream myfile1;
-	myfile1.open("C:\\Users\\Julien\\Documents\\ENSAE\\C++\\Projet\\WinesClassification\\Results\\training_dataset.csv");
+	myfile1.open("..\\..\\Results\\training_dataset.csv");
 
-	for (int i = 0; i<2500; i++)
+	for (int i = 0; i<floor((0.666)*dataMatrix.size()); i++) //select the first 2/3 elements of the database
 	{
 		for (int j = 0; j < dataMatrix[0].size(); j++)
 		{
@@ -83,9 +87,9 @@ void DataHandler::DataAdapter(vector<vector<double>> dataMatrix)
 	myfile1.close();
 
 	ofstream myfile2;
-	myfile2.open("C:\\Users\\Julien\\Documents\\ENSAE\\C++\\Projet\\WinesClassification\\Results\\testing_dataset.csv");
+	myfile2.open("..\\..\\Results\\testing_dataset.csv");
 
-	for (int i = 2500; i< 3500; i++) //Select 1000 other samples
+	for (int i = floor((0.666)*dataMatrix.size()); i< floor((0.666)*dataMatrix.size()) + floor((0.166)*dataMatrix.size()); i++) //Select the next 1/6 samples
 	{
 		for (int j = 0; j < dataMatrix[0].size(); j++)
 		{
@@ -96,9 +100,9 @@ void DataHandler::DataAdapter(vector<vector<double>> dataMatrix)
 	myfile2.close();
 
 	ofstream myfile3;
-	myfile3.open("C:\\Users\\Julien\\Documents\\ENSAE\\C++\\Projet\\WinesClassification\\Results\\predict_dataset.csv");
+	myfile3.open("..\\..\\Results\\predict_dataset.csv");
 
-	for (int i = 3500; i< dataMatrix.size(); i++) //Select the last samples
+	for (int i = floor((0.666)*dataMatrix.size()) + floor((0.166)*dataMatrix.size()); i< dataMatrix.size(); i++) //Select the last samples
 	{
 		for (int j = 0; j < dataMatrix[0].size(); j++)
 		{
@@ -110,12 +114,9 @@ void DataHandler::DataAdapter(vector<vector<double>> dataMatrix)
 }
 
 
-void DataHandler::DataImporter(cv::Mat &sampleData, cv::Mat &labels, int nbSamples)
+void DataHandler::DataImporter(cv::Mat &sampleData, cv::Mat &labels)
 {
-	int label;			//label is the output classes labels
-	double variable;	//variables are the input explanatory variables
-
-	vector<vector<double>> input(nbSamples, vector<double>(12));
+	vector<vector<double>> input(sampleData.rows, vector<double>(sampleData.cols+1));
 
 	ifstream file(_filepath);
 	string line;
@@ -136,6 +137,9 @@ void DataHandler::DataImporter(cv::Mat &sampleData, cv::Mat &labels, int nbSampl
 	}
 	file.close();
 
+	double variable;	//variables are the input explanatory variables
+	int label;			//label is the output classes labels
+
 	for (int i = 0; i < input.size(); i++)
 	{
 		for (int j = 0; j < input[0].size(); j++)
@@ -150,7 +154,7 @@ void DataHandler::DataImporter(cv::Mat &sampleData, cv::Mat &labels, int nbSampl
 			else if (j == input[0].size()-1)
 			{
 				label = input[i][j];
-				labels.at<double>(i, label) = 1.0;
+				labels.at<double>(i, label) = 1.0; //the labels begin at 3 and go to 9
 			}
 		}
 		//we have two cv::Matrices which contain the input and output data for the NN

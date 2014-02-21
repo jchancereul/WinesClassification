@@ -23,12 +23,12 @@ void NNModel::Train(cv::Mat trainingData, cv::Mat trainingClasses, char *path)
 	//Create the MLP network using the CvANN_MLP class in OpenCV
 	//1- Choosing the number of neurons in each layer.
 	//We arbitrary choose 3 layers:
-	//10 neurons in the input layer (10 explanatory variables)
-	//8 neurons in the hidden layer (arbitrary)
-	//6 neurons in the output layer (6 qualitites of wine)
+	//11 neurons in the input layer (11 explanatory variables)
+	//9 neurons in the hidden layer (arbitrary)
+	//7 neurons in the output layer (7 qualitites of wine)
 	cv::Mat layers(3, 1, CV_32S);
 	layers.at<int>(0, 0) = _nbInputVariables;
-	layers.at<int>(1, 0) = 10; //check here
+	layers.at<int>(1, 0) = 9;
 	layers.at<int>(2, 0) = _nbOutputClasses;
 
 	//2- Create the structure of the neural network
@@ -83,7 +83,7 @@ void NNModel::Predict(char *path, cv::Mat predictData, cv::Mat classificationRes
 			{
 				maxValue = predictResults.at<double>(i, j);
 				predictedClass = j;
-				printf("MaxValue: %f\t PredictedClass: %d\n", maxValue,predictedClass);
+				//printf("Element: %d\t PredictedClass: %d\n", i,predictedClass);
 			}
 			classificationResults.at<int>(i, 0) = predictedClass;
 		}
