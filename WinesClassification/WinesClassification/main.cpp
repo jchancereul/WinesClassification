@@ -79,6 +79,7 @@ void main()
 	vector<double> maxima = { 14.2, 1.1, 1.66, 19.95, 0.346, 82.5, 336.5, 1.03898, 3.82, 1.08, 14.2 };
 	vector<double> minima = { 0.05, 0.08, 0, 0.01, 0.009, 0.02, 0.09, 0.01, 0.03, 0.01, 0.08 };
 
+
 	vector<double> v = predictVector;
 	for (int i = 0; i < nbVariables; i++)
 	{
