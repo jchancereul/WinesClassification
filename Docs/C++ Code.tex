@@ -1,0 +1,255 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = IsoLatin
+\documentclass[french,11pt,twoside]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage[letterpaper]{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{esint}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{ulem}
+\usepackage{graphicx}
+\usepackage{amsmath}  \newtheorem{de}{Définition}[subsection] \newtheorem{theo}{Théorème}[section]  \newtheorem{prop}[theo]{Proposition}
+\usepackage[mathscr]{euscript}
+\usepackage{tabularx}
+\usepackage{eso-pic}
+\usepackage{xcolor}
+\usepackage{color}
+\usepackage[colorlinks,linkcolor=blue]{hyperref}%%Pour avoir tout en noir: \usepackage[colorlinks,linkcolor=black]{hyperref}%%
+\usepackage[center]{caption}
+\usepackage[frenchb]{babel}
+\usepackage{amsthm} % permet d'avoir l'environnement proof.
+\usepackage{multirow}
+\frenchbsetup{StandardItemLabels,CompactItemize=false}
+ % permet d'obtenir les listes bullet point meme avec le package french babel,ReduceListSpacing=false
+
+\makeatletter
+\def\clap#1{\hbox to 0pt{\hss #1\hss}}
+\def\ligne#1{
+\hbox to \hsize{
+\vbox{\centering #1}}}
+\def\haut#1#2#3{%
+\hbox to \hsize{%
+\rlap{\vtop{\raggedright #1}}
+\hss
+\clap{\vtop{\centering #2}}
+\hss
+\llap{\vtop{\raggedleft #3}}}}
+\def\bas#1#2#3{
+\hbox to \hsize{
+\rlap{\vbox{\raggedright #1}}
+\hss
+\clap{\vbox{\centering #2}}
+\hss}
+\llap{\vbox{\raggedleft #3}}}
+\def\maketitle{
+\thispagestyle{empty}\vbox to \vsize{%
+\haut{}{\@blurb}{}
+\vfill
+\vspace{1cm}
+\begin{flushleft}
+\usefont{OT1}{ptm}{m}{n}
+\huge \center \@title
+\end{flushleft}
+\par
+\vspace{0.5cm}
+\hrule height 1pt
+\par
+\begin{flushright}
+\usefont{OT1}{phv}{m}{n}
+\Large \center \@author
+\par
+\end{flushright}
+\vspace{1cm}
+\vfill
+\vfill
+\bas{}{\@bla}{}
+}%
+
+}
+\def\date#1{\def\@date{#1}}
+\def\author#1{\def\@author{#1}}
+\def\title#1{\def\@title{#1}}
+\def\location#1{\def\@location{#1}}
+\def\blurb#1{\def\@blurb{#1}}
+\def\bla#1{\def\@bla{#1}}
+\author{}
+\title{}
+\location{Paris}\blurb{}
+\makeatother
+\title{ \huge{\textsc{Implementation of Neural Network using C++ }}}
+\author{\small{Nicolas BETIN Julien CHANCEREUL Yannick DERIPPE \\[5em] 2013-2014 }}
+\location{Paris}
+\date{2013}
+\blurb{\large{\textsc{École Nationale de la Statistique et de l'Administration Économique}}\\[5em]}
+\bla{%
+\large{Projet de C++ }
+}%
+
+\def\R{\mathbb{R}} %ensemble des réels
+\def\C{\mathbb{C}} %ensemble des complexes
+\def\K{\mathbb{K}} %corps des réels ou complexes
+\def\N{\mathbb{N}} %ensemble des entiers naturels
+\def\Z{\mathbb{Z}} %ensemble des entiers relatifs
+\def\Q{\mathbb{Q}} %ensemble des rationnels
+\def\E{\mathbb{E}} %espérance mathématique
+\def\V{\mathbb{V}} %variance mathématique
+\def\P{\mathbb{P}} %probabilité
+\def\Norm{\mathcal{N}} %Loi normale
+\def\combi{\mathrm{C}} %nombre de combinaisons
+\def\diff{\,\mathrm{d}} %différentielle
+\def\arrange{\mathrm{A}} %nombre d'arrangements
+\def\tr{\mathrm{Tr}} %trace
+\def\rg{\mathrm{Rg}} %rang
+\def\Score{\mathrm{Score}} %score
+\def\Cov{\mathrm{Cov}} %covariance
+\def\var{\mathrm{V}_{Emp}} %variance empirique
+\def\d{\partial} %différentielle
+\newcommand\ds{\displaystyle{}}
+\renewcommand\arctan{\mathrm{Arctan}}
+\renewcommand\arcsin{\mathrm{Arcsin}}
+\renewcommand\arccos{\mathrm{Arccos}}
+
+\renewcommand\ker{\mathrm{Ker}}
+\def\im{\mathrm{Im}} %image d'un endomorphisme
+\def\vect{\mathrm{Vect}} %espace engendré
+\def\Mat{\mathrm{Mat}} %matrice d'une application linéaire
+\def\indic{\mathbf{1}\!\mathrm{l}} %indicatrice d'un ensemble
+\newcommand{\transposee}[1]{{\vphantom{#1}}^{\mathit t}{#1}} %transposée d'une matrice
+\renewcommand\hat{\widehat} %mieux pour les estimateurs
+\newcommand{\norme}[1]{\left\Vert {#1} \right\Vert} %norme dans un espace vectoriel
+\newcommand{\valabs}[1]{\left\vert {#1} \right\vert} %valeur absolue
+\newcommand{\scal}[1]{\left\langle {#1} \right\rangle} %produit scalaire
+\renewcommand\epsilon{\varepsilon} %joli epsilon
+\newcommand{\entiere}[1]{\left\lfloor\, {#1} \,\right\rfloor} % partie entière
+\def\L{\mathcal{L}} %ensemble des fonctions intégrables
+\def\M{\mathcal{M}} %ensemble de matrices
+\def\equivo{\Longleftrightarrow} %double fleche d'équivalence
+\def\espaceproba{(\Omega,\mathcal{A},\P )} %espace de proba omega , A ,P
+\def\comp{\mathrm{c}} %complémentaire
+
+
+
+%\ifpdf
+%\AddToShipoutPicture{\resizebox{0.8\pdfpagewidth}{ 0.8\pdfpageheight}%
+%{\rotatebox{45}{\color[gray]{0.9}\hspace*{8mm}\textsc{DRAFT}}}}
+%\else
+%\AddToShipoutPicture{\resizebox{0.8\paperwidth}{0. 8\paperheight}%
+%{\rotatebox{45}{\color[gray]{0.9}\hspace*{8mm}\textsc{DRAFT}}}}
+%\fi
+
+\makeatletter
+
+\newcommand{\noun}[1]{\textsc{#1}}
+
+\makeatother
+
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{3}
+\definecolor{vert}{rgb}{0,0,0}%{0.05,0.64,0.38}
+\newcommand{\imp}[1]{\textcolor{vert}{#1}}
+
+%En tete %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{ #1}}
+\renewcommand{\headrulewidth}{0.1pt}
+\rhead[]{\rightmark}
+\lhead[\leftmark]{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%% Debut Doc %%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%Page de garde 
+\maketitle
+
+\section{Introduction}
+
+The aim of this project is to predict the quality of different types of wine. The artificial neural network is a machine learning technique that uses explicative (input) variables to predict the value of another (output) variable via series of neurons. The learning principle is the minimization of the model's error, through its retropropagation from the output layer to the input layer. 
+\\
+
+The program has to be trained on a dataset. The values of the explicative variables and that of the predicted variable are known in the training dataset. After the training, the neural network can predict the value of the output variable when the values of the input variables of an observation are given.
+
+
+\section{Dataset and library}
+
+Our dataset is extracted from the UCI Machine Learning Repository website and contains 4898 observations of white wines. \\
+
+There are 11 numerical input variables: fixed acidity, volatile acidity, citric acid, residual sugar, chlorides, free sulphur dioxide, total sulphur dioxide, density, pH, sulphates and alcohol. The output variable is a score between 0 and 10 that represents the quality of the wine. Our major goal was to successfully build a usable program that could come in useful to any kind of user. In order to achieve that, we used an already existing machine learning library called OpenCV that manages Neural Network implementation.
+\\
+
+The programming of the neural network in C++ required 3 major steps. 
+
+\section{Importation of data}
+
+
+
+The first one consisted in importing the data using C++. We first imported the .csv file, that contains the 4898 observations, via C++ and transformed it into a matrix of dimension (12,4898). We normalized each of the 11 first columns, the columns of the input variables, for the data to be contained between 0 and 1. The normalization function used is defined by : $ x = (x-x_{min})/(x_{max}-x_{min})$. \\
+
+We then exported the transformed matrix into 3 separate .csv files : one aims at training the neural network, and contains the majority of the data, the second one is used to test the accuracy of the neural network by computing the percentage of good predictions, and the last one is reserved for pure prediction, so that other people can try and use the program. In order to have unbiased results, we randomly shuffled the lines of the matrix before the separation. The first two matrices are then each separated into two, one containing the input variables, the other containing the output variable, so that they can be used by OpenCV.
+
+\section{Construction of the model}
+
+The second step is the construction of the model using the OpenCV library. We arbitrarily chose 3 layers of neurons: the first one contains one neuron for each input variable, the hidden one contains 9 neurons, and the last one contains one neuron for each output modality.  The activation function chosen, the function used to transform the data that goes through a neuron, is the sigmoid function. Its expression is the following : $ S(t) = 1 / (1+exp(-t)) $ .
+We then wrote a method that creates the trained model, a method that predicts the output variables for non-training data, and another one that computes the accuracy of the model.
+
+\section{User interface}
+
+The final step of our work is the programming of a graphical user interface, using the application framework Qt. The graphical interface calls the C++ program in order to:
+\begin{enumerate}
+	\item Train the neural network model
+	\item Store the model in an xml file
+	\item Use this model to predict the class label of user's data
+\end{enumerate}
+Our goal was to allow the user to manually enter the values of each of the 11 input variables, and then the interface would return the predicted quality computed by the neural network. Nevertheless, we were not able to achieve that and the user actually has to enter his data diretly in the command prompt. We also included a button that returns an error message when one of the values of the input variables is not included between the minimum and maximum values of the training dataset.
+
+\section{OpenCV Integration}
+In order to implement a neural network in C++, we used the OpenCV library. This library is useful to handle images and to do machine learning with C++.
+
+\subsection{Installation}
+\begin{enumerate}
+	\item Download and install the basic OpenCV 2.4.8 package on the Opencv website
+	\item To integrate the library in Visual Studio 2013, we modified the properties of our VS Project in the properties manager
+	\item You can find our configuration files in the ``Utilities'' folder in our github project
+\end{enumerate}
+\textbf{NOTA:} We used 64-bit computers to run our programs and we installed the 64-bit version of OpenCV.
+The installation process take time and we have encounter a lot of problems during the VS implementation.
+
+\subsection{Use}
+We used the opencv\_core248.dll and opencvml\_248.dll during the project. The two major functions of interest for us were the data importation and the multi layers perceptrons model. You can find these in the DataHandler and NNModel classes.
+
+\section{How to compile the code}
+You need to install the OpenCV library to run the purely C++ code and Qt Creator 5.2.1 to run the graphical interface code.
+
+\section{How to get the .exe files}
+The VS project returns us .exe files (Debug and Release). In order to run these without VS 2013, you have to:
+\begin{enumerate}
+	\item Put your training data in the ../../folder
+	\item Create a Results/trained\_models in the ../../folder
+	\item Copy the opencv\_core248(d).dll and opencv\_ml248(d).dll in your Release (Debug) folder
+\end{enumerate}
+That done, we were able to launch the .exe files without VS and the neural network was successfully created.
+
+\section{Problems}
+During the project, we encountered several problems:
+\begin{itemize}
+	\item Use the different \textbf{vector}, \textbf{std} and \textbf{cv::Mat} classes to handle arrays
+	\item Correctly handle the data
+	\item Compatibility problems between our computers and software
+	\item Make the juncture between Visual Studio and Qt Creator
+\end{itemize}
+We couldn't create a single program using Qt because the VS integration seemed very bad and the final program calls WinesClassification.exe from the graphical interface. The user can then enter his data in the command prompt and control the likelihood of his data using the graphical interface.
+
+\end{document}
+
+
+
+
+
