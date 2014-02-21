@@ -83,10 +83,10 @@ void NNModel::Predict(char *path, cv::Mat predictData, cv::Mat classificationRes
 			{
 				maxValue = predictResults.at<double>(i, j);
 				predictedClass = j;
-				//printf("Element: %d\t PredictedClass: %d\n", i,predictedClass);
 			}
 			classificationResults.at<int>(i, 0) = predictedClass;
 		}
+		printf("Predicted Class Label: %d\n", classificationResults.at<int>(0, 0));
 	}
 }
 
