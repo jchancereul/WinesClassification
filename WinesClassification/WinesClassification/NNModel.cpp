@@ -86,7 +86,9 @@ void NNModel::Predict(char *path, cv::Mat predictData, cv::Mat classificationRes
 			}
 			classificationResults.at<int>(i, 0) = predictedClass;
 		}
-		cout << classificationResults.at<int>(0, 0);
+		cout << "Predicted class label:\t";
+		cout <<classificationResults.at<int>(0, 0) << endl;
+		system("pause");
 	}
 }
 
